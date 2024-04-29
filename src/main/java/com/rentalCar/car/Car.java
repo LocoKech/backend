@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.time.LocalDate;
-
 @Entity
 @Table(name = "cars")
 public class Car {
@@ -19,16 +17,13 @@ public class Car {
 
     private Integer numberOfSeats;
 
-    private LocalDate reservationEndDate;
-
     private Long price;
 
-    public Car(String matriculate, String mark, String type, Integer numberOfSeats, LocalDate reservationEndDate, Long price) {
+    public Car(String matriculate, String mark, String type, Integer numberOfSeats, Long price) {
         this.matriculate = matriculate;
         this.mark = mark;
         this.type = type;
         this.numberOfSeats = numberOfSeats;
-        this.reservationEndDate = reservationEndDate;
         this.price = price;
     }
 
@@ -80,11 +75,4 @@ public class Car {
         this.numberOfSeats = numberOfSeats;
     }
 
-    public LocalDate getReservationEndDate() {
-        return reservationEndDate;
-    }
-
-    public void setReservationEndDate(LocalDate reservationEndDate) {
-        this.reservationEndDate = reservationEndDate;
-    }
 }
