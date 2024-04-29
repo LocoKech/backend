@@ -11,7 +11,51 @@ public class CarFilter {
     private Long priceFrom;
     private Long priceTo;
 
+    private Double review;
+
+    private boolean automaticTransmission;
+
+    private boolean airConditioning;
+
+    private Long numberOfDoors;
+
+    public CarFilter() {
+    }
+
     // Constructor, getters, and setters
+
+
+    public Double getReview() {
+        return review;
+    }
+
+    public void setReview(Double review) {
+        this.review = review;
+    }
+
+    public boolean isAutomaticTransmission() {
+        return automaticTransmission;
+    }
+
+    public void setAutomaticTransmission(boolean automaticTransmission) {
+        this.automaticTransmission = automaticTransmission;
+    }
+
+    public boolean isAirConditioning() {
+        return airConditioning;
+    }
+
+    public void setAirConditioning(boolean airConditioning) {
+        this.airConditioning = airConditioning;
+    }
+
+    public Long getNumberOfDoors() {
+        return numberOfDoors;
+    }
+
+    public void setNumberOfDoors(Long numberOfDoors) {
+        this.numberOfDoors = numberOfDoors;
+    }
 
     public String getMark() {
         return mark;

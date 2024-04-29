@@ -17,24 +17,79 @@ public class Car {
 
     private Integer numberOfSeats;
 
-    private Long price;
+    private Double price;
 
-    public Car(String matriculate, String mark, String type, Integer numberOfSeats, Long price) {
+    private Double review;
+
+    private String imageUrl;
+
+    private boolean automaticTransmission;
+
+    private boolean airConditioning;
+
+    private Long numberOfDoors;
+
+    public Car(String matriculate, String mark, String type, Integer numberOfSeats, Double price, Double review, String imageUrl, boolean automaticTransmission, boolean airConditioning, Long numberOfDoors) {
         this.matriculate = matriculate;
         this.mark = mark;
         this.type = type;
         this.numberOfSeats = numberOfSeats;
         this.price = price;
+        this.review = review;
+        this.imageUrl = imageUrl;
+        this.automaticTransmission = automaticTransmission;
+        this.airConditioning = airConditioning;
+        this.numberOfDoors = numberOfDoors;
     }
 
     public Car() {
     }
 
-    public Long getPrice() {
+    public Double getReview() {
+        return review;
+    }
+
+    public void setReview(Double review) {
+        this.review = review;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public boolean isAutomaticTransmission() {
+        return automaticTransmission;
+    }
+
+    public void setAutomaticTransmission(boolean automaticTransmission) {
+        this.automaticTransmission = automaticTransmission;
+    }
+
+    public boolean isAirConditioning() {
+        return airConditioning;
+    }
+
+    public void setAirConditioning(boolean airConditioning) {
+        this.airConditioning = airConditioning;
+    }
+
+    public Long getNumberOfDoors() {
+        return numberOfDoors;
+    }
+
+    public void setNumberOfDoors(Long numberOfDoors) {
+        this.numberOfDoors = numberOfDoors;
+    }
+
+    public Double getPrice() {
         return this.price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

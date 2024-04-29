@@ -17,7 +17,11 @@ public class CarSpec {
                 .and(hasNumberOfSeats(carFilter.getNumberOfSeats()))
                 .and(hasNoBookingOnDate(carFilter.getReservationDate()))
                 .and(hasPriceGreaterThan(carFilter.getPriceFrom()))
-                .and(hasPriceLessThan(carFilter.getPriceTo()));
+                .and(hasPriceLessThan(carFilter.getPriceTo()))
+                .and(hasAirConditioning(carFilter.isAirConditioning()))
+                .and(hasAutomaticTransmission(carFilter.isAutomaticTransmission()))
+                .and(hasNumberOfDoors(carFilter.getNumberOfDoors()))
+                .and(hasReviewGreaterThan(carFilter.getReview()));
     }
 
     private static Specification<Car> hasMark(String mark) {
@@ -58,5 +62,21 @@ public class CarSpec {
 
     private static Specification<Car> hasPriceLessThan(Long priceTo) {
         return (root, query, cb) -> priceTo == null ? cb.conjunction() : cb.lessThan(root.get("price"), BigDecimal.valueOf(priceTo));
+    }
+
+    public static Specification<Car> hasReviewGreaterThan(Double reviewFrom) {
+        return (root, query, cb) -> reviewFrom == null ? cb.conjunction() : cb.greaterThanOrEqualTo(root.get("review"), reviewFrom);
+    }
+
+    public static Specification<Car> hasAutomaticTransmission(boolean automaticTransmission) {
+        return (root, query, cb) -> cb.equal(root.get("automaticTransmission"), automaticTransmission);
+    }
+
+    public static Specification<Car> hasAirConditioning(boolean airConditioning) {
+        return (root, query, cb) -> cb.equal(root.get("airConditioning"), airConditioning);
+    }
+
+    public static Specification<Car> hasNumberOfDoors(Long numberOfDoors) {
+        return (root, query, cb) -> numberOfDoors == null ? cb.conjunction() : cb.equal(root.get("numberOfDoors"), numberOfDoors);
     }
 }
