@@ -77,7 +77,8 @@ public class CarController {
             @RequestParam(required = false) String mark,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) Integer numberOfSeats,
-            @RequestParam(required = false) String reservationDate,
+            @RequestParam(required = false) String fromDate,
+            @RequestParam(required = false) String toDate,
             @RequestParam(required = false) Long priceFrom,
             @RequestParam(required = false) Long priceTo,
             @RequestParam(required = false) Double reviewFrom,
@@ -93,7 +94,8 @@ public class CarController {
         carFilter.setMark(mark);
         carFilter.setType(type);
         carFilter.setNumberOfSeats(numberOfSeats);
-        carFilter.setReservationDate(reservationDate != null ? LocalDate.parse(reservationDate) : null);
+        carFilter.setToDate(toDate != null ? LocalDate.parse(toDate) : null);
+        carFilter.setFromDate(fromDate != null ? LocalDate.parse(fromDate) : null);
         carFilter.setPriceFrom(priceFrom);
         carFilter.setPriceTo(priceTo);
         carFilter.setReview(reviewFrom);

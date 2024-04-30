@@ -15,7 +15,7 @@ public class CarSpec {
                 .where(hasMark(carFilter.getMark()))
                 .and(hasType(carFilter.getType()))
                 .and(hasNumberOfSeats(carFilter.getNumberOfSeats()))
-                .and(hasNoBookingOnDate(carFilter.getReservationDate()))
+                .and(hasNoBookingInInterval(carFilter.getFromDate(),carFilter.getToDate()))
                 .and(hasPriceGreaterThan(carFilter.getPriceFrom()))
                 .and(hasPriceLessThan(carFilter.getPriceTo()))
                 .and(hasAirConditioning(carFilter.isAirConditioning()))
@@ -36,24 +36,26 @@ public class CarSpec {
         return (root, query, cb) -> numberOfSeats == null ? cb.conjunction() : cb.equal(root.get("numberOfSeats"), numberOfSeats);
     }
 
-    private static Specification<Car> hasNoBookingOnDate(LocalDate reservationDate) {
-        return (root, query, cb) -> {
-            if (reservationDate == null) {
-                return cb.conjunction(); // No reservation date specified, so all cars are considered available
-            } else {
-                Subquery<Long> subquery = query.subquery(Long.class);
-                Root<Booking> bookingRoot = subquery.from(Booking.class);
-                subquery.select(cb.count(bookingRoot.get("id")));
-                subquery.where(
-                        cb.equal(bookingRoot.get("car"), root),
-                        cb.lessThanOrEqualTo(bookingRoot.get("startDate"), reservationDate),
-                        cb.greaterThanOrEqualTo(bookingRoot.get("endDate"), reservationDate)
-                );
+        public static Specification<Car> hasNoBookingInInterval(LocalDate fromDate, LocalDate toDate) {
+            return (root, query, cb) -> {
+                if (fromDate == null || toDate == null) {
+                    return cb.conjunction();
+                } else {
+                    Subquery<Long> subquery = query.subquery(Long.class);
+                    Root<Booking> bookingRoot = subquery.from(Booking.class);
+                    subquery.select(cb.count(bookingRoot.get("id")));
+                    subquery.where(
+                            cb.equal(bookingRoot.get("car"), root),
+                            cb.greaterThanOrEqualTo(bookingRoot.get("endDate"), fromDate),
+                            cb.lessThanOrEqualTo(bookingRoot.get("startDate"), toDate)
+                    );
 
-                return cb.equal(subquery, 0L); // Cars with no bookings on the specified date
-            }
-        };
-    }
+                    return cb.equal(subquery, 0L);
+                }
+            };
+        }
+
+
 
 
     private static Specification<Car> hasPriceGreaterThan(Long priceFrom) {

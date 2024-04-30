@@ -7,7 +7,9 @@ public class CarFilter {
     private String mark;
     private String type;
     private Integer numberOfSeats;
-    private LocalDate reservationDate;
+    private LocalDate fromDate;
+
+    private LocalDate toDate;
     private Long priceFrom;
     private Long priceTo;
 
@@ -24,6 +26,22 @@ public class CarFilter {
 
     // Constructor, getters, and setters
 
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public LocalDate getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
+    }
 
     public Double getReview() {
         return review;
@@ -81,18 +99,10 @@ public class CarFilter {
         this.numberOfSeats = numberOfSeats;
     }
 
-    public LocalDate getReservationDate() {
-        return reservationDate;
-    }
-
-    public void setReservationDate(LocalDate reservationDate) {
-        this.reservationDate = reservationDate;
-    }
 
     public Long getPriceFrom() {
         return priceFrom;
     }
-
     public void setPriceFrom(Long priceFrom) {
         this.priceFrom = priceFrom;
     }
