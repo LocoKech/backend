@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class CarSpec {
 
@@ -24,13 +25,14 @@ public class CarSpec {
                 .and(hasReviewGreaterThan(carFilter.getReview()));
     }
 
-    private static Specification<Car> hasMark(String mark) {
-        return (root, query, cb) -> mark == null || mark.isEmpty() ? cb.conjunction() : cb.equal(root.get("mark"), mark);
+    private static Specification<Car> hasMark(List<String> marks) {
+        return (root, query, cb) -> marks == null || marks.isEmpty() ? cb.conjunction() : root.get("mark").in(marks);
     }
 
-    private static Specification<Car> hasType(String type) {
-        return (root, query, cb) -> type == null || type.isEmpty() ? cb.conjunction() : cb.equal(root.get("type"), type);
+    private static Specification<Car> hasType(List<String> types) {
+        return (root, query, cb) -> types == null || types.isEmpty() ? cb.conjunction() : root.get("type").in(types);
     }
+
 
     private static Specification<Car> hasNumberOfSeats(Integer numberOfSeats) {
         return (root, query, cb) -> numberOfSeats == null ? cb.conjunction() : cb.equal(root.get("numberOfSeats"), numberOfSeats);
@@ -70,12 +72,22 @@ public class CarSpec {
         return (root, query, cb) -> reviewFrom == null ? cb.conjunction() : cb.greaterThanOrEqualTo(root.get("review"), reviewFrom);
     }
 
-    public static Specification<Car> hasAutomaticTransmission(boolean automaticTransmission) {
-        return (root, query, cb) -> cb.equal(root.get("automaticTransmission"), automaticTransmission);
+    public static Specification<Car> hasAutomaticTransmission(Boolean automaticTransmission) {
+        return (root, query, cb) -> {
+            if (automaticTransmission == null) {
+                return cb.conjunction();
+            }
+            return cb.equal(root.get("automaticTransmission"), automaticTransmission);
+        };
     }
 
-    public static Specification<Car> hasAirConditioning(boolean airConditioning) {
-        return (root, query, cb) -> cb.equal(root.get("airConditioning"), airConditioning);
+    public static Specification<Car> hasAirConditioning(Boolean airConditioning) {
+        return (root, query, cb) -> {
+            if (airConditioning == null) {
+                return cb.conjunction();
+            }
+            return cb.equal(root.get("airConditioning"), airConditioning);
+        };
     }
 
     public static Specification<Car> hasNumberOfDoors(Long numberOfDoors) {

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CarService {
 
@@ -24,5 +26,9 @@ public class CarService {
     public Page<Car> getAllCars(CarFilter carFilter, Pageable pageable) {
         Specification<Car> spec = CarSpec.filterBy(carFilter);
         return carRepository.findAll(spec, pageable);
+    }
+
+    public List<Car> allCars() {
+        return this.carRepository.findAll();
     }
 }

@@ -13,6 +13,10 @@ public class Car {
 
     private String mark;
 
+    private String model;
+
+    private Long passengers;
+
     private String type;
 
     private Integer numberOfSeats;
@@ -23,15 +27,17 @@ public class Car {
 
     private String imageUrl;
 
-    private boolean automaticTransmission;
+    private Boolean automaticTransmission;
 
-    private boolean airConditioning;
+    private Boolean airConditioning;
 
     private Long numberOfDoors;
 
-    public Car(String matriculate, String mark, String type, Integer numberOfSeats, Double price, Double review, String imageUrl, boolean automaticTransmission, boolean airConditioning, Long numberOfDoors) {
+    public Car(String matriculate, String mark, String model, Long passengers, String type, Integer numberOfSeats, Double price, Double review, String imageUrl, boolean automaticTransmission, boolean airConditioning, Long numberOfDoors) {
         this.matriculate = matriculate;
         this.mark = mark;
+        this.model = model;
+        this.passengers = passengers;
         this.type = type;
         this.numberOfSeats = numberOfSeats;
         this.price = price;
@@ -61,19 +67,19 @@ public class Car {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isAutomaticTransmission() {
+    public Boolean isAutomaticTransmission() {
         return automaticTransmission;
     }
 
-    public void setAutomaticTransmission(boolean automaticTransmission) {
+    public void setAutomaticTransmission(Boolean automaticTransmission) {
         this.automaticTransmission = automaticTransmission;
     }
 
-    public boolean isAirConditioning() {
+    public Boolean isAirConditioning() {
         return airConditioning;
     }
 
-    public void setAirConditioning(boolean airConditioning) {
+    public void setAirConditioning(Boolean airConditioning) {
         this.airConditioning = airConditioning;
     }
 
@@ -130,4 +136,43 @@ public class Car {
         this.numberOfSeats = numberOfSeats;
     }
 
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public Long getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Long passengers) {
+        this.passengers = passengers;
+    }
+
+    public Boolean getAutomaticTransmission() {
+        return automaticTransmission;
+    }
+
+    public Boolean getAirConditioning() {
+        return airConditioning;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "matriculate='" + matriculate + '\'' +
+                ", mark='" + mark + '\'' +
+                ", type='" + type + '\'' +
+                ", numberOfSeats=" + numberOfSeats +
+                ", price=" + price +
+                ", review=" + review +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", automaticTransmission=" + automaticTransmission +
+                ", airConditioning=" + airConditioning +
+                ", numberOfDoors=" + numberOfDoors +
+                '}';
+    }
 }

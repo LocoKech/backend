@@ -1,11 +1,12 @@
 package com.rentalCar.car;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class CarFilter {
 
-    private String mark;
-    private String type;
+    private List<String> mark;
+    private List<String> type;
     private Integer numberOfSeats;
     private LocalDate fromDate;
 
@@ -15,9 +16,9 @@ public class CarFilter {
 
     private Double review;
 
-    private boolean automaticTransmission;
+    private Boolean automaticTransmission;
 
-    private boolean airConditioning;
+    private Boolean airConditioning;
 
     private Long numberOfDoors;
 
@@ -51,19 +52,19 @@ public class CarFilter {
         this.review = review;
     }
 
-    public boolean isAutomaticTransmission() {
+    public Boolean isAutomaticTransmission() {
         return automaticTransmission;
     }
 
-    public void setAutomaticTransmission(boolean automaticTransmission) {
+    public void setAutomaticTransmission(Boolean automaticTransmission) {
         this.automaticTransmission = automaticTransmission;
     }
 
-    public boolean isAirConditioning() {
+    public Boolean isAirConditioning() {
         return airConditioning;
     }
 
-    public void setAirConditioning(boolean airConditioning) {
+    public void setAirConditioning(Boolean airConditioning) {
         this.airConditioning = airConditioning;
     }
 
@@ -75,19 +76,19 @@ public class CarFilter {
         this.numberOfDoors = numberOfDoors;
     }
 
-    public String getMark() {
+    public List<String> getMark() {
         return mark;
     }
 
-    public void setMark(String mark) {
+    public void setMark(List<String> mark) {
         this.mark = mark;
     }
 
-    public String getType() {
+    public List<String> getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(List<String> type) {
         this.type = type;
     }
 
