@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "cars")
 public class Car {
@@ -27,13 +30,15 @@ public class Car {
 
     private String imageUrl;
 
+    private List<String> detailsImages = new ArrayList<>();
+
     private Boolean automaticTransmission;
 
     private Boolean airConditioning;
 
     private Long numberOfDoors;
 
-    public Car(String matriculate, String mark, String model, Long passengers, String type, Integer numberOfSeats, Double price, Double review, String imageUrl, boolean automaticTransmission, boolean airConditioning, Long numberOfDoors) {
+    public Car(String matriculate, String mark, String model, Long passengers, String type, Integer numberOfSeats, Double price, Double review, String imageUrl, List<String> detailsImages, boolean automaticTransmission, boolean airConditioning, Long numberOfDoors) {
         this.matriculate = matriculate;
         this.mark = mark;
         this.model = model;
@@ -43,6 +48,7 @@ public class Car {
         this.price = price;
         this.review = review;
         this.imageUrl = imageUrl;
+        this.detailsImages = detailsImages;
         this.automaticTransmission = automaticTransmission;
         this.airConditioning = airConditioning;
         this.numberOfDoors = numberOfDoors;
@@ -57,6 +63,14 @@ public class Car {
 
     public void setReview(Double review) {
         this.review = review;
+    }
+
+    public List<String> getDetailsImages() {
+        return detailsImages;
+    }
+
+    public void setDetailsImages(List<String> detailsImages) {
+        this.detailsImages = detailsImages;
     }
 
     public String getImageUrl() {
