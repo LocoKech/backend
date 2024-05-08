@@ -31,4 +31,12 @@ public class CarService {
     public List<Car> allCars() {
         return this.carRepository.findAll();
     }
+
+    public List<String> getAllMarks(){
+        return this.carRepository.findAllMarks();
+    }
+
+    public List<String> getAllTypes(){
+        return this.carRepository.findAllMarks();
+    }
 }
