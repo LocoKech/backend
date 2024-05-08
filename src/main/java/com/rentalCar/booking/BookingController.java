@@ -1,5 +1,6 @@
 package com.rentalCar.booking;
 
+import com.rentalCar.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,11 @@ public class BookingController {
     @PostMapping()
     public Booking createBooking(@RequestBody BookingRequest bookingRequest) {
         return bookingService.createBooking(bookingRequest);
+    }
+
+    @PostMapping()
+    public Booking createBookingAndUser(@RequestBody() BookingAndUserRequest bookingAndUserRequest) {
+        return bookingService.createBookingAndUser(bookingAndUserRequest);
     }
 
 }
