@@ -56,4 +56,16 @@ public class BookingService {
     }
 
 
+    public Booking createBookingAndUser(BookingAndUserRequest bookingAndUserRequest) {
+
+        Car car = this.carRepository.findById(bookingAndUserRequest.getMatriculate())
+                .orElseThrow(() -> new EntityNotFoundException("Car not found"));
+
+        Booking booking = new Booking();
+        booking.setUser(bookingAndUserRequest.getUser());
+        booking.setEndDate(bookingAndUserRequest.getEndDate());
+        booking.setStartDate(bookingAndUserRequest.getStartDate());
+        booking.setCar(car);
+        return booking;
+    }
 }
