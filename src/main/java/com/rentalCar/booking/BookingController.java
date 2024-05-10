@@ -33,7 +33,7 @@ public class BookingController {
         return bookingService.createBooking(bookingRequest);
     }
 
-    @PostMapping()
+    @PostMapping("/client")
     public Booking createBookingAndUser(@RequestBody() BookingAndUserRequest bookingAndUserRequest) {
         return bookingService.createBookingAndUser(bookingAndUserRequest);
     }

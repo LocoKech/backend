@@ -3,6 +3,7 @@ package com.rentalCar.booking;
 import com.rentalCar.user.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class BookingAndUserRequest {
 
@@ -12,14 +13,17 @@ public class BookingAndUserRequest {
 
     private String matriculate;
 
+    private List<BookingExtraRequest> extraRequests;
+
     public BookingAndUserRequest() {
     }
 
-    public BookingAndUserRequest(User user, LocalDate startDate, LocalDate endDate, String matriculate) {
+    public BookingAndUserRequest(User user, LocalDate startDate, LocalDate endDate, String matriculate, List<BookingExtraRequest> extraRequests) {
         this.user = user;
         this.startDate = startDate;
         this.endDate = endDate;
         this.matriculate = matriculate;
+        this.extraRequests = extraRequests;
     }
 
     public String getMatriculate() {
@@ -52,5 +56,13 @@ public class BookingAndUserRequest {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public List<BookingExtraRequest> getExtraRequests() {
+        return extraRequests;
+    }
+
+    public void setExtraRequests(List<BookingExtraRequest> extraRequests) {
+        this.extraRequests = extraRequests;
     }
 }
