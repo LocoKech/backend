@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,5 +43,13 @@ public class CarService {
 
     public List<String> getAllTypes(){
         return this.carRepository.findAllMarks();
+    }
+
+    public Car editCar(Car car) {
+        return  this.carRepository.save(car);
+    }
+
+    public void deleteCar(String matriculate) {
+        this.carRepository.deleteById(matriculate);
     }
 }

@@ -139,6 +139,16 @@ public class CarController {
         return ResponseEntity.ok(marks);
     }
 
+    @PutMapping("")
+    public ResponseEntity<Car> editCar(@RequestBody Car car){
+        return ResponseEntity.ok(this.carService.editCar(car));
+    }
+
+    @DeleteMapping("/{matriculate}")
+    public void deleteCar(@PathVariable String matriculate){
+        this.carService.deleteCar(matriculate);
+    }
+
 
 
     private LocalDate parseLocalDate(String dateString) {
