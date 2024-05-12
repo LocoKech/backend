@@ -142,7 +142,8 @@ public class CarController {
 
 
     private LocalDate parseLocalDate(String dateString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss 'GMT' Z '('z')'", Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
         return LocalDate.parse(dateString, formatter);
     }
+
 }
