@@ -77,7 +77,7 @@ public class CarController {
 
             System.out.println(car);
 
-            return ResponseEntity.ok().body("Car uploaded successfully. Image path: " + imageUrl + car);
+            return ResponseEntity.ok().body("Car uploaded successfully.");
 
     }
 
