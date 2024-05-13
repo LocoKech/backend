@@ -14,7 +14,7 @@
 	<name>car-rental</name>
 	<description>car rental app</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>22</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -41,6 +41,19 @@
 			<artifactId>cloudinary-http44</artifactId>
 			<version>1.27.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-core -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-aws-core</artifactId>
+			<version>2.2.6.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.24.9</version>
+		</dependency>
+
 
 	</dependencies>
 

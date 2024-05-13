@@ -118,7 +118,7 @@ public class CarController {
         carFilter.setNumberOfDoors(numberOfDoors);
 
         PageRequest pageable = PageRequest.of(page, size , Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        return carService."getAllCars"(carFilter, pageable);
+        return carService.getAllCars(carFilter, pageable);
     }
 
     @GetMapping("all")
