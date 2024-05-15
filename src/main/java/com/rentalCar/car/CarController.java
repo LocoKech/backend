@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,7 @@ public class CarController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<String> uploadCar(
             @RequestParam("image") MultipartFile image,
             @RequestParam("detailsImages") List<MultipartFile> detailsImages,
@@ -140,11 +142,13 @@ public class CarController {
     }
 
     @PutMapping("")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Car> editCar(@RequestBody Car car){
         return ResponseEntity.ok(this.carService.editCar(car));
     }
 
     @DeleteMapping("/{matriculate}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public void deleteCar(@PathVariable String matriculate){
         this.carService.deleteCar(matriculate);
     }

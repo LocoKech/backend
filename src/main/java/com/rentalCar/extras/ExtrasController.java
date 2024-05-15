@@ -2,6 +2,7 @@ package com.rentalCar.extras;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +30,13 @@ public class ExtrasController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public Extras createExtra(@RequestBody Extras extra){
         return this.extrasService.createExtra(extra);
     }
 
     @PutMapping()
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public Extras editExtra(@RequestBody Extras extra){
         return this.extrasService.editExtra(extra);
     }

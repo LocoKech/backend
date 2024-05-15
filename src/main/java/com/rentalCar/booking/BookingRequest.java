@@ -1,25 +1,30 @@
 package com.rentalCar.booking;
 
+import com.rentalCar.user.SecondDriver;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 public class BookingRequest {
     private String carId;
-    private UUID userId;
+    private Long clientId;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    private SecondDriver secondDriver;
 
     private List<BookingExtraRequest> extraRequests;
 
     public BookingRequest() {
     }
 
-    public BookingRequest(String carId, UUID userId, LocalDate startDate, LocalDate endDate, List<BookingExtraRequest> extraRequests) {
+    public BookingRequest(Long clientId, UUID userId, LocalDate startDate, LocalDate endDate, SecondDriver secondDriver, List<BookingExtraRequest> extraRequests) {
         this.carId = carId;
-        this.userId = userId;
+        this.clientId = clientId;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.secondDriver = secondDriver;
         this.extraRequests = extraRequests;
     }
 
@@ -39,12 +44,12 @@ public class BookingRequest {
         this.extraRequests = extraRequests;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public Long getClientId() {
+        return clientId;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 
     public LocalDate getStartDate() {
@@ -61,5 +66,13 @@ public class BookingRequest {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public SecondDriver getSecondDriver() {
+        return secondDriver;
+    }
+
+    public void setSecondDriver(SecondDriver secondDriver) {
+        this.secondDriver = secondDriver;
     }
 }
