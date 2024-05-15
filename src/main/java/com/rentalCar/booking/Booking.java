@@ -1,14 +1,13 @@
 package com.rentalCar.booking;
 
 import com.rentalCar.car.Car;
+import com.rentalCar.client.Client;
 import com.rentalCar.extras.Extras;
-import com.rentalCar.user.User;
+import com.rentalCar.user.SecondDriver;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -23,8 +22,11 @@ public class Booking {
     private Car car;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "uuid")
-    private User user;
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    private Client client;
+
+    @Embedded()
+    private SecondDriver secondDriver;
 
     private LocalDate startDate;
 
@@ -40,10 +42,11 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(Long id, Car car, User user, LocalDate startDate, LocalDate endDate, Double totalPrice) {
+    public Booking(Long id, Car ca, Client client, SecondDriver secondDriver, LocalDate startDate, LocalDate endDate, Double totalPrice) {
         this.id = id;
+        this.client = client;
         this.car = car;
-        this.user = user;
+        this.secondDriver = secondDriver;
         this.startDate = startDate;
         this.endDate = endDate;
         this.totalPrice = totalPrice;
@@ -69,6 +72,14 @@ public class Booking {
         return extrasQuantity;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     public void setExtrasQuantity(Map<Extras, Long> extrasQuantity) {
         this.extrasQuantity = extrasQuantity;
     }
@@ -81,13 +92,6 @@ public class Booking {
         this.car = car;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -103,5 +107,13 @@ public class Booking {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public SecondDriver getSecondDriver() {
+        return secondDriver;
+    }
+
+    public void setSecondDriver(SecondDriver secondDriver) {
+        this.secondDriver = secondDriver;
     }
 }
