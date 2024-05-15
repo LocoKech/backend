@@ -4,15 +4,11 @@ import jakarta.persistence.*;
 
 @Embeddable
 public class SecondDriver {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private String name;
     private String licenseNumber;
 
-    public SecondDriver(Long id, String name, String licenseNumber) {
-        this.id = id;
+    public SecondDriver( String name, String licenseNumber) {
         this.name = name;
         this.licenseNumber = licenseNumber;
     }
@@ -20,13 +16,6 @@ public class SecondDriver {
     public SecondDriver() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
