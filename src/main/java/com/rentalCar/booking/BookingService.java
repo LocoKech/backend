@@ -6,17 +6,15 @@ import com.rentalCar.client.Client;
 import com.rentalCar.client.ClientRepository;
 import com.rentalCar.extras.Extras;
 import com.rentalCar.extras.ExtrasRepository;
-import com.rentalCar.user.User;
 import com.rentalCar.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Service
 public class BookingService {
@@ -29,13 +27,16 @@ public class BookingService {
 
     private final ExtrasRepository extrasRepository;
 
+    private final EmailService emailService;
+
 
     @Autowired()
-    public BookingService(BookingRepository bookingRepository, CarRepository carRepository, UserRepository userRepository, CarRepository carRepository1, UserRepository userRepository1, ClientRepository clientRepository, ExtrasRepository extrasRepository) {
+    public BookingService(BookingRepository bookingRepository, CarRepository carRepository, UserRepository userRepository, CarRepository carRepository1, UserRepository userRepository1, ClientRepository clientRepository, ExtrasRepository extrasRepository, EmailService emailService) {
         this.bookingRepository = bookingRepository;
         this.carRepository = carRepository1;
         this.clientRepository = clientRepository;
         this.extrasRepository = extrasRepository;
+        this.emailService = emailService;
     }
 
 
@@ -58,7 +59,7 @@ public class BookingService {
 
         // Check if the car is available for the given dates
         // Assuming there is a method in the repository to check for availability
-        if (!carRepository.isCarAvailable(car.getMatriculate(), bookingRequest.getStartDate(), bookingRequest.getEndDate())) {
+        if (carRepository.isCarAvailable(car.getMatriculate(), bookingRequest.getStartDate(), bookingRequest.getEndDate())) {
             throw new IllegalArgumentException("Car is not available for the selected dates");
         }
 
@@ -68,7 +69,9 @@ public class BookingService {
         }
 
         Booking booking = new Booking();
-        Double price = car.getPrice();
+        long durationInDays = ChronoUnit.DAYS.between(bookingRequest.getStartDate(), bookingRequest.getEndDate());
+
+        Double price = car.getPrice() * durationInDays;
 
         booking.setCar(car);
         booking.setClient(client);
@@ -76,6 +79,7 @@ public class BookingService {
         booking.setEndDate(bookingRequest.getEndDate());
 
         Map<Extras, Long> extrasQuantity = new HashMap<>();
+        if (bookingRequest.getExtraRequests() != null)
         for (BookingExtraRequest extraRequest : bookingRequest.getExtraRequests()) {
             Extras extra = extrasRepository.findById(extraRequest.getId())
                     .orElseThrow(() -> new EntityNotFoundException("Extra not found"));
@@ -90,7 +94,10 @@ public class BookingService {
             booking.setSecondDriver(bookingRequest.getSecondDriver());
         }
 
-        return bookingRepository.save(booking);
+        Booking savedBooking  = bookingRepository.save(booking);
+        this.emailService.sendBookingConfirmationEmail(booking,booking.getClient().getEmail());
+        return savedBooking;
+
     }
 
 
@@ -108,5 +115,6 @@ public class BookingService {
 
         return this.createBooking(bookingRequest);
     }
+
 
 }
