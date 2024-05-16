@@ -2,6 +2,7 @@ package com.rentalCar.car;
 
 import com.rentalCar.images.CloudinaryService;
 import com.rentalCar.images.S3Service;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -139,6 +140,63 @@ public class CarController {
         PageRequest pageable = PageRequest.of(page, size , Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         return carService.getAllCars(carFilter, pageable);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<String> editCar(
+            @PathVariable String id,
+            @RequestParam(value = "image", required = false) MultipartFile image, // Optional image
+            @RequestParam(value = "detailsImages", required = false) List<MultipartFile> detailsImages, // Optional list of images
+            @RequestParam("matriculate") String matriculate,
+            @RequestParam("mark") String mark,
+            @RequestParam("model") String model,
+            @RequestParam("passengers") Long passengers,
+            @RequestParam("type") String type,
+            @RequestParam("numberOfSeats") int numberOfSeats,
+            @RequestParam("price") Double price,
+            @RequestParam("review") Double review,
+            @RequestParam("automaticTransmission") Boolean automaticTransmission,
+            @RequestParam("airConditioning") Boolean airConditioning,
+            @RequestParam("numberOfDoors") Long numberOfDoors) throws IOException {
+
+        Car existingCar = carService.getCarById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Car not found"));
+
+
+        this.s3Service.deleteOldImages(existingCar,bucketName);
+
+
+
+        String imageUrl = null;
+        if (image != null && !image.isEmpty()) {
+            imageUrl = s3Service.uploadFile(image, bucketName);
+        }
+
+        List<String> details = existingCar.getDetailsImages() != null ? new ArrayList<>(existingCar.getDetailsImages()) : new ArrayList<>();
+        for (MultipartFile detailImage : detailsImages) {
+            String detailImageUrl = s3Service.uploadFile(detailImage, bucketName);
+            details.add(detailImageUrl);
+        }
+
+        existingCar.setMatriculate(matriculate);
+        existingCar.setMark(mark);
+        existingCar.setModel(model);
+        existingCar.setPassengers(passengers);
+        existingCar.setType(type);
+        existingCar.setNumberOfSeats(numberOfSeats);
+        existingCar.setPrice(price);
+        existingCar.setReview(review);
+        existingCar.setAutomaticTransmission(automaticTransmission);
+        existingCar.setAirConditioning(airConditioning);
+        existingCar.setNumberOfDoors(numberOfDoors);
+        existingCar.setImageUrl(imageUrl != null ? imageUrl : existingCar.getImageUrl()); // Update or keep existing image URL
+        existingCar.setDetailsImages(details);
+
+        carService.editCar(existingCar);
+
+        return ResponseEntity.ok().body("Car edited successfully.");
+    }
+
 
     @GetMapping("all")
     public List<Car> getAllCars(){
