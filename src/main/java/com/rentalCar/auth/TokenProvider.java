@@ -1,9 +1,11 @@
 package com.rentalCar.auth;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rentalCar.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,17 @@ public class TokenProvider {
                     .getSubject();
         } catch (JWTVerificationException exception) {
             throw new JWTVerificationException("Error while validating token", exception);
+        }
+    }
+
+    public String decryptToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return decodedJWT.getClaim("username").asString();
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Error while verifying token", exception);
         }
     }
 

@@ -33,27 +33,29 @@ public class EmailService {
 
             // Prepare the Thymeleaf context with the variables
             Context context = new Context();
-            context.setVariable("customerName", booking.getClient().getFirstName() + " " + booking.getClient().getLastName());
+            context.setVariable("carModel", booking.getCar().getModel() + " or something equally awesome!");
             context.setVariable("startDate", booking.getStartDate().format(DateTimeFormatter.ofPattern("EEE, MMM d, yyyy")));
             context.setVariable("endDate", booking.getEndDate().format(DateTimeFormatter.ofPattern("EEE, MMM d, yyyy")));
-            context.setVariable("carModel", booking.getCar().getModel());
-            context.setVariable("totalPrice", booking.getTotalPrice());
+            context.setVariable("startLocation", "42 Wallaby Way, Los Angeles, CA, United States");
+            context.setVariable("endLocation", "42 Wallaby Way, Los Angeles, CA, United States");
+            context.setVariable("price", String.format("$%.2f", booking.getCar().getPrice()));
+            context.setVariable("transmission", booking.getCar().getAutomaticTransmission());
+            context.setVariable("total", String.format("$%.2f", booking.getTotalPrice()));
 
             // Prepare the list of extras with their quantities
             context.setVariable("items", booking.getExtrasQuantity().entrySet().stream()
                     .map(entry -> Map.of(
                             "description", entry.getKey().getName(),
                             "quantity", entry.getValue(),
-                            "price", entry.getKey().getPrice() * entry.getValue()))
+                            "price", String.format("$%.2f", entry.getKey().getPrice() * entry.getValue())))
                     .collect(Collectors.toList()));
 
-            context.setVariable("companyName", "Your Company Name"); // Replace with your company name
+            context.setVariable("companyName", "LokoKech");
 
-            // Generate the email content using the Thymeleaf template
             String content = templateEngine.process("emailConfirmation", context); // template name without '.html'
-            helper.setText(content, true); // Set content type as HTML
+            helper.setText(content, true);
 
-            // Send the email
+
             emailSender.send(message);
         } catch (Exception e) {
             // Handle exceptions during email sending (log or notify admin)

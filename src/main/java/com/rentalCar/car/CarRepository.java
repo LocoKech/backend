@@ -19,8 +19,9 @@ public interface CarRepository extends JpaRepository<Car,String>, JpaSpecificati
     @Query("SELECT DISTINCT c.type FROM Car c")
     List<String> findAllTypes();
 
-    @Query("SELECT COUNT(b) > 0 FROM Booking b WHERE b.car.matriculate = :carId AND " +
+    @Query("SELECT COUNT(b) = 0 FROM Booking b WHERE b.car.matriculate = :carId AND " +
             "(:startDate BETWEEN b.startDate AND b.endDate OR :endDate BETWEEN b.startDate AND b.endDate OR " +
             "b.startDate BETWEEN :startDate AND :endDate OR b.endDate BETWEEN :startDate AND :endDate)")
     boolean isCarAvailable(@Param("carId") String carId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
 }

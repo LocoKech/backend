@@ -59,9 +59,9 @@ public class BookingService {
 
         // Check if the car is available for the given dates
         // Assuming there is a method in the repository to check for availability
-        if (carRepository.isCarAvailable(car.getMatriculate(), bookingRequest.getStartDate(), bookingRequest.getEndDate())) {
-            throw new IllegalArgumentException("Car is not available for the selected dates");
-        }
+      //  if (carRepository.isCarAvailable(car.getMatriculate(), bookingRequest.getStartDate(), bookingRequest.getEndDate())) {
+        //    throw new IllegalArgumentException("Car is not available for the selected dates");
+        //}
 
         // Check if start date is before end date
         if (bookingRequest.getStartDate().isAfter(bookingRequest.getEndDate())) {
@@ -86,6 +86,7 @@ public class BookingService {
             extrasQuantity.put(extra, extraRequest.getQuantity());
             price += extra.getPrice() * extraRequest.getQuantity();
         }
+
         booking.setExtrasQuantity(extrasQuantity);
         booking.setTotalPrice(price);
 
