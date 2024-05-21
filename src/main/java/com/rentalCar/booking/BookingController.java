@@ -1,7 +1,11 @@
 package com.rentalCar.booking;
 
 import com.rentalCar.user.User;
+import org.eclipse.angus.mail.iap.ByteArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +42,16 @@ public class BookingController {
 
     @PostMapping("/client")
     public Booking createBookingAndUser(@RequestBody() BookingAndUserRequest bookingAndUserRequest) {
+
         return bookingService.createBookingAndUser(bookingAndUserRequest);
+    }
+
+    @GetMapping("/{id}/contract")
+    public ResponseEntity<ByteArrayResource> getContract(@PathVariable Long id) {
+
+       // String htmlContent = this.bookingService.getContract(id);
+
+        return this.bookingService.getContractAsPdf(id);
     }
 
 }

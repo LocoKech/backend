@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental Confirmation</title>
+    <style>
+
+    body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #E5E5E5; color: #333; }
+    .email-container { background-color: #ffffff; width: 100%; max-width: 600px; margin: 20px auto; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(to right, #4B3F6B, #6A82FB); color: #ffffff; padding: 20px; text-align: center; }
+    .content { padding: 20px; line-height: 1.6; background-color: #ffffff; }
+    .footer { background-color: #F8F8F8; color: #555; padding: 20px; text-align: center; font-size: 0.85em; }
+    .button { display: inline-block; padding: 12px 25px; background-color: #4B3F6B; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; }
+    .info { margin-bottom: 10px; font-size: 16px; }
+    .info-title { font-weight: bold; color: #333; }
+    .important { color: #007BFF; font-size: 18px; margin-top: 10px; }
+    .list-item { margin-left: 20px; list-style-type: disc; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    td, th { border-bottom: 1px solid #dddddd; padding: 8px; text-align: left; }
+    th { background-color: #F0F0F0; }
+    .date-card, .car-details { background-color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; padding: 10px 20px; border-radius: 5px; }
+    .date-title, .section-title { font-size: 0.85em;font-weight:700; color: #007fff; text-transform: uppercase; margin-bottom: 5px; }
+  .date-data {font-weight:700 ; color : #007fff}
+  .date-location { color : #777}
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Your Car is Reserved at LAX</h1>
+        <p th:text="${carModel} + ' or something equally awesome!'">Toyota Corolla or something equally awesome!</p>
+    </div>
+    <div class="content">
+        <p class="important">First time renting with us?</p>
+        <ul>
+            <li class="list-item">Make sure to have your valid driver's license</li>
+            <li class="list-item">$99 deposit will be held at pickup</li>
+        </ul>
+        <div class="date-card">
+            <div class="date-title">Start Date</div>
+            <p th:text="${startDate}">Tue February 1st, 11:30am</p>
+            <p class="date-location" th:text="${startLocation}">42 Wallaby Way, Los Angeles, CA, United States</p>
+        </div>
+        <div class="date-card">
+            <div class="date-title">End Date</div>
+            <p th:text="${endDate}">Fri February 3rd, 5:30pm</p>
+            <p class="date-location" th:text="${endLocation}">42 Wallaby Way, Los Angeles, CA, United States</p>
+        </div>
+        <div class="car-details">
+            <div class="section-title">Car Details</div>
+            <p><strong>Model:</strong> <span th:text="${carModel}">Toyota Corolla</span></p>
+            <p><strong>Price:</strong> <span th:text="${price}">$200</span></p>
+            <p><strong>Transmission:</strong> <span th:text="${transmission}">Automatic</span></p>
+        </div>
+        <h2>Your Receipt</h2>
+
+        <table>
+            <tr><th>Item Description</th><th>Price</th></tr>
+            <tr th:each="item : ${items}"><td th:text="${item.description}">Standard Sedan (3 day)</td><td th:text="${item.price}">$200.00</td></tr>
+            <tr><td><strong>Total</strong></td><td th:text="${total}"><strong>$310.00</strong></td></tr>
+        </table>
+
+
+        <a href="#" class="button">Pay Now</a>
+    </div>
+    <div class="footer">
+        <p>Have a Question?</p>
+        <a href="#">Go to FAQ</a> | <a href="#">Give us a call</a> | <a href="#">Message us</a>
+        <p>Contact | Unsubscribe | View in Browser</p>
+        <p>6355 Westchester Pkwy, Los Angeles, CA 90045 © 2024 [Your Company]</p>
+    </div>
+</div>
+</body>
+</html>

@@ -6,13 +6,21 @@ import com.rentalCar.client.Client;
 import com.rentalCar.client.ClientRepository;
 import com.rentalCar.extras.Extras;
 import com.rentalCar.extras.ExtrasRepository;
+import com.rentalCar.user.SecondDriver;
 import com.rentalCar.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.time.LocalDate;
+import java.io.ByteArrayOutputStream;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -28,6 +36,10 @@ public class BookingService {
     private final ExtrasRepository extrasRepository;
 
     private final EmailService emailService;
+
+    @Autowired
+    private SpringTemplateEngine templateEngine;
+
 
 
     @Autowired()
@@ -90,9 +102,12 @@ public class BookingService {
         booking.setExtrasQuantity(extrasQuantity);
         booking.setTotalPrice(price);
 
-        // Handle optional second driver
+        System.out.println(bookingRequest.getSecondDriver());
         if (bookingRequest.getSecondDriver() != null) {
-            booking.setSecondDriver(bookingRequest.getSecondDriver());
+            SecondDriver secondDriver = new SecondDriver();
+            secondDriver.setLicenseNumber(bookingRequest.getSecondDriver().getLicenseNumber());
+            secondDriver.setName(bookingRequest.getSecondDriver().getName());
+            booking.setSecondDriver(secondDriver);
         }
 
         Booking savedBooking  = bookingRepository.save(booking);
@@ -113,9 +128,50 @@ public class BookingService {
         bookingRequest.setCarId(bookingAndUserRequest.getMatriculate());
         bookingRequest.setEndDate(bookingAndUserRequest.getEndDate());
         bookingRequest.setStartDate(bookingAndUserRequest.getStartDate());
+        bookingRequest.setSecondDriver(bookingAndUserRequest.getSecondDriver());
 
         return this.createBooking(bookingRequest);
     }
 
 
+    public String getContract(Long id) {
+        Booking booking = this.bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("booking not found"));
+        Context context = new Context();
+        context.setVariable("booking", booking);
+
+        String htmlContent = templateEngine.process("contract", context);
+        return htmlContent;
+    }
+    public ResponseEntity<ByteArrayResource> getContractAsPdf(Long id) {
+        Booking booking = this.bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        Context context = new Context();
+        context.setVariable("booking", booking);
+
+        String htmlContent = templateEngine.process("contract", context);
+
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(htmlContent);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+            outputStream.close();
+
+            byte[] pdfBytes = outputStream.toByteArray();
+            ByteArrayResource resource = new ByteArrayResource(pdfBytes);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=contract.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(pdfBytes.length)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                    .body(resource);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -1,5 +1,8 @@
 package com.rentalCar.maintenance;
 
+import com.rentalCar.booking.EmailService;
+import com.rentalCar.car.Car;
+import com.rentalCar.car.CarRepository;
 import com.rentalCar.images.S3Service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,10 +29,16 @@ public class MaintenanceService {
     private String bucketName;
 
     @Autowired
-    private JavaMailSender emailSender;
+    private EmailService emailService;
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private CarRepository carRepository;
+
+    @Value("${admin.email}")
+    private String adminEmail;
     @Autowired
     public MaintenanceService(MaintenanceRepository maintenanceRepository) {
         this.maintenanceRepository = maintenanceRepository;
@@ -57,18 +67,63 @@ public class MaintenanceService {
 
 
 
-    @Scheduled(cron = "0 0 0 * * ?") // Runs every day at midnight
+    @Scheduled(cron = "0 26 11 * * ?")
     public void checkMaintenance() {
         List<Maintenance> maintenances = maintenanceRepository.findAll();
         List<Maintenance> dueMaintenances = maintenances.stream()
                 .filter(this::isDueForMaintenance)
                 .collect(Collectors.toList());
-        dueMaintenances.forEach(this::sendReminder);
     }
 
     private boolean isDueForMaintenance(Maintenance maintenance) {
+        LocalDate currentDate = LocalDate.now();
         LocalDate nextDueDate = calculateNextDueDate(maintenance.getLastMaintenanceDate(), maintenance.getFrequency());
-        return nextDueDate.isBefore(LocalDate.now()) || nextDueDate.isEqual(LocalDate.now());
+        LocalDate warningDate = currentDate.plusWeeks(1);
+
+        if (nextDueDate.isBefore(currentDate)) {
+            sendMaintenanceOverdueReminder(maintenance);
+            return true;
+        }
+
+        if (nextDueDate.isBefore(warningDate) || nextDueDate.isEqual(warningDate)) {
+            sendMaintenanceUpcomingReminder(maintenance);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void sendMaintenanceOverdueReminder(Maintenance maintenance) {
+        String subject = "Maintenance Overdue: " + maintenance.getTaskName();
+        String text = "The maintenance task '" + maintenance.getTaskName() +
+                "' for car " + maintenance.getCar().getMatriculate() +
+                " was due on " + maintenance.getLastMaintenanceDate().plus(frequencyToPeriod(maintenance.getFrequency())) +
+                " and is now overdue. Please take action.";
+        emailService.sendSimpleMessage("admin@example.com", subject, text);
+    }
+
+    private void sendMaintenanceUpcomingReminder(Maintenance maintenance) {
+        String subject = "Upcoming Maintenance: " + maintenance.getTaskName();
+        String text = "The maintenance task '" + maintenance.getTaskName() +
+                "' for car " + maintenance.getCar().getMatriculate() +
+                " is due on " + maintenance.getLastMaintenanceDate().plus(frequencyToPeriod(maintenance.getFrequency())) +
+                ". Please prepare to complete this task.";
+        emailService.sendSimpleMessage("admin@example.com", subject, text);
+    }
+
+    private Period frequencyToPeriod(Frequency frequency) {
+        switch (frequency) {
+            case DAILY:
+                return Period.ofDays(1);
+            case WEEKLY:
+                return Period.ofWeeks(1);
+            case MONTHLY:
+                return Period.ofMonths(1);
+            case YEARLY:
+                return Period.ofYears(1);
+            default:
+                throw new IllegalArgumentException("Unknown frequency: " + frequency);
+        }
     }
 
     private LocalDate calculateNextDueDate(LocalDate lastMaintenanceDate, Frequency frequency) {
@@ -86,15 +141,6 @@ public class MaintenanceService {
         }
     }
 
-    private void sendReminder(Maintenance maintenance) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("admin@example.com"); // Set the admin's email address
-        message.setSubject("Maintenance Reminder: " + maintenance.getTaskName());
-        message.setText("The following maintenance task is due: " + maintenance.getTaskName() +
-                "\nDescription: " + maintenance.getDescription() +
-                "\nCar: " + maintenance.getCar().getMatriculate());
-        emailSender.send(message);
-    }
 
     public List<Maintenance> getDueMaintenanceTasks() {
         List<Maintenance> maintenances = maintenanceRepository.findAll();
@@ -113,5 +159,18 @@ public class MaintenanceService {
             String detailImageUrl = s3Service.uploadFile(file, bucketName);
             details.add(detailImageUrl);
         }
+    }
+
+    public Maintenance save(MaintenanceRequest request) {
+        Car car = carRepository.findById(request.getCarId()).orElseThrow(() -> new RuntimeException("Car not found"));
+
+        Maintenance maintenance = new Maintenance();
+        maintenance.setTaskName(request.getTaskName());
+        maintenance.setDescription(request.getDescription());
+        maintenance.setFrequency(request.getFrequency());
+        maintenance.setLastMaintenanceDate(request.getLastMaintenanceDate());
+        maintenance.setCar(car);
+
+        return maintenanceRepository.save(maintenance);
     }
 }

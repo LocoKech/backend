@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Contrat de Location</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        .container {
+            margin: 20px;
+        }
+        .header, .footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .section p {
+            margin: 5px 0;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table, .table th, .table td {
+            border: 1px solid black;
+        }
+        .table th, .table td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>LOKO Kech</h1>
+        <h2>Contrat de Location</h2>
+    </div>
+    <div class="section">
+        <h2>Le Locataire</h2>
+        <p><strong>Nom:</strong> <span th:text="${booking.client.lastName}"></span></p>
+        <p><strong>Prénom:</strong> <span th:text="${booking.client.firstName}"></span></p>
+        <p><strong>Numéro de Téléphone:</strong> <span th:text="${booking.client.phoneNumber}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${booking.client.email}"></span></p>
+        <p><strong>Identifiant:</strong> <span th:text="${booking.client.identifiant}"></span></p>
+    </div>
+    <div class="section">
+        <h2>Le Véhicule en Location</h2>
+        <p><strong>Immatriculation:</strong> <span th:text="${booking.car.matriculate}"></span></p>
+        <p><strong>Marque / Modèle:</strong> <span th:text="${booking.car.model}"></span></p>
+    </div>
+    <div class="section">
+        <h2>Le 2ème Conducteur déclaré</h2>
+        <p><strong>Nom:</strong> <span th:text="${booking.secondDriver.name}"></span></p>
+        <p><strong>Numéro de Permis:</strong> <span th:text="${booking.secondDriver.licenseNumber}"></span></p>
+    </div>
+    <div class="section">
+        <h2>Dates de Location</h2>
+        <p><strong>Date de Départ:</strong> <span th:text="${booking.startDate}"></span></p>
+        <p><strong>Date de Retour:</strong> <span th:text="${booking.endDate}"></span></p>
+    </div>
+    <div class="section">
+        <h2>Extras</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Quantité</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="extra : ${booking.extrasQuantity}">
+                <td th:text="${extra.key.name}"></td>
+                <td th:text="${extra.value}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="section">
+        <h2>Prix Total</h2>
+        <p><strong>Total:</strong> <span th:text="${booking.totalPrice}"></span> EUR</p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 LOKO kech CAR. Tous droits réservés.</p>
+        <p>Signature du Client: ________________________</p>
+        <p>Signature de l'Agence: ________________________</p>
+    </div>
+</div>
+</body>
+</html>

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +52,17 @@ import java.util.Optional;
         public ResponseEntity<Void> deleteWarranty(@PathVariable Long id) {
             warrantyService.deleteWarranty(id);
             return ResponseEntity.noContent().build();
+        }
+
+        @PostMapping("/{maintenanceId}/invoices")
+        public ResponseEntity<String> addInvoice(@PathVariable Long warantyId, @RequestParam("file") List<MultipartFile> file)  {
+            try{
+                warrantyService.addInvoice(warantyId, file);
+                return ResponseEntity.ok().body("invoices uploaded successfully.");
+            }catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 

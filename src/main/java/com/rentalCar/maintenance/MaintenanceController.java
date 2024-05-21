@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -19,9 +20,9 @@ public class MaintenanceController {
     }
 
     @PostMapping
-    public ResponseEntity<Maintenance> createMaintenance(@RequestBody Maintenance maintenance) {
-        Maintenance createdMaintenance = maintenanceService.createMaintenance(maintenance);
-        return new ResponseEntity<>(createdMaintenance, HttpStatus.CREATED);
+    public Maintenance createMaintenance(@RequestBody MaintenanceRequest request) {
+
+        return this.maintenanceService.save(request);
     }
 
     @GetMapping("/{id}")

@@ -4,6 +4,7 @@ import com.rentalCar.car.Car;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "warranties")
@@ -23,16 +24,19 @@ public class Warranty {
 
     private LocalDate endDate;
 
+    private List<String> invoices;
+
     public Warranty() {
     }
 
-    public Warranty(Long id, Car car, String warrantyProvider, LocalDate startDate, Long coveragePeriod, LocalDate endDate) {
+    public Warranty(Long id, Car car, String warrantyProvider, LocalDate startDate, Long coveragePeriod, LocalDate endDate, List<String> invoices) {
         this.id = id;
         this.car = car;
         this.warrantyProvider = warrantyProvider;
         this.startDate = startDate;
         this.coveragePeriod = coveragePeriod;
         this.endDate = endDate;
+        this.invoices = invoices;
     }
 
     public Long getId() {
@@ -81,5 +85,13 @@ public class Warranty {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public List<String> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<String> invoices) {
+        this.invoices = invoices;
     }
 }
