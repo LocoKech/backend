@@ -9,6 +9,7 @@ import java.util.UUID;
 public class BookingRequest {
     private String carId;
     private Long clientId;
+
     private LocalDate startDate;
     private LocalDate endDate;
 

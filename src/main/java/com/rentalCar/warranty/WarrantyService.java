@@ -93,4 +93,11 @@ public class WarrantyService {
             details.add(detailImageUrl);
         }
     }
+
+    public List<Warranty> getDueWarranties() {
+        List<Warranty> maintenances = this.warrantyRepository.findAll();
+        return maintenances.stream()
+                .filter(this::isExpiringSoon)
+                .collect(Collectors.toList());
+    }
 }

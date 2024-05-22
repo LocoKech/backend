@@ -31,4 +31,15 @@ public class UserService {
     }
 
 
+    public User editUser(User newUser) {
+        return this.userRepository.save(newUser);
+    }
+
+    public void deleteUser(UUID id){
+        this.userRepository.deleteById(id);
+    }
+
+    public User getUserByUsername(String username) {
+        return this.userRepository.findByUserName(username);
+    }
 }

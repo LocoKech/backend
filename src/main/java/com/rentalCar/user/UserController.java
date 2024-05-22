@@ -34,4 +34,20 @@ public class UserController {
         return this.userService.createUser(newUser);
     }
 
+    @PutMapping()
+    public User editUser(@RequestBody User newUser){
+        return this.userService.editUser(newUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable UUID id){
+        this.userService.deleteUser(id);
+    }
+
+    @GetMapping("/username/{username}")
+    public User getUser(@PathVariable String username){
+        return this.userService.getUserByUsername(username);
+    }
+
+
 }

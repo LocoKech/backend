@@ -46,12 +46,30 @@ public class BookingController {
         return bookingService.createBookingAndUser(bookingAndUserRequest);
     }
 
+    @PutMapping("/{id}")
+    public Booking editBooking(@PathVariable Long id,@RequestBody BookingRequest bookingRequest){
+        return this.bookingService.editBooking(id,bookingRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBooking(@PathVariable Long id){
+        this.bookingService.deleteBooking(id);
+    }
+
     @GetMapping("/{id}/contract")
     public ResponseEntity<ByteArrayResource> getContract(@PathVariable Long id) {
 
        // String htmlContent = this.bookingService.getContract(id);
 
         return this.bookingService.getContractAsPdf(id);
+    }
+
+    @GetMapping("/{id}/receipt")
+    public ResponseEntity<ByteArrayResource> getReceipt(@PathVariable Long id) {
+
+        // String htmlContent = this.bookingService.getContract(id);
+
+        return this.bookingService.getReceiptAsPdf(id);
     }
 
 }

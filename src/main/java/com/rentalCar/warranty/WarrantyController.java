@@ -64,5 +64,10 @@ import java.util.Optional;
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+
+        @GetMapping("/due")
+        public List<Warranty> getDueWarranties(){
+            return this.warrantyService.getDueWarranties();
+        }
     }
 

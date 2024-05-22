@@ -174,4 +174,55 @@ public class BookingService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public Booking editBooking(Long id, BookingRequest bookingRequest) {
+        Booking booking = this.bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        booking.setStartDate(bookingRequest.getStartDate());
+        booking.setEndDate(bookingRequest.getEndDate());
+        booking.setSecondDriver(bookingRequest.getSecondDriver());
+        Map<Extras,Long> extras = new HashMap<>();
+        for (BookingExtraRequest extraRequest : bookingRequest.getExtraRequests()){
+            Extras extra = this.extrasRepository.findById(extraRequest.getId()).orElseThrow(() -> new EntityNotFoundException("extra not found"));
+            extras.put(extra,extraRequest.getQuantity());
+        }
+        booking.setExtrasQuantity(extras);
+        return booking;
+    }
+
+    public void deleteBooking(Long id) {
+        this.bookingRepository.deleteById(id);
+    }
+
+    public ResponseEntity<ByteArrayResource> getReceiptAsPdf(Long id) {
+        Booking booking = this.bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        Context context = new Context();
+        context.setVariable("booking", booking);
+
+        String htmlContent = templateEngine.process("receipt", context);
+
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(htmlContent);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+            outputStream.close();
+
+            byte[] pdfBytes = outputStream.toByteArray();
+            ByteArrayResource resource = new ByteArrayResource(pdfBytes);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=receipt.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(pdfBytes.length)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                    .body(resource);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
