@@ -20,6 +20,8 @@ public class Maintenance {
 
     private LocalDate lastMaintenanceDate;
 
+    private Double cost;
+
 
     @ManyToOne()
     @JoinColumn(name = "vehicle_id")
@@ -30,12 +32,13 @@ public class Maintenance {
     public Maintenance() {
     }
 
-    public Maintenance(Long id, String taskName, String description, Frequency frequency, LocalDate lastMaintenanceDate, Car car, List<String> invoices) {
+    public Maintenance(Long id, String taskName, String description, Frequency frequency, LocalDate lastMaintenanceDate, Double cost, Car car, List<String> invoices) {
         this.id = id;
         this.taskName = taskName;
         this.description = description;
         this.frequency = frequency;
         this.lastMaintenanceDate = lastMaintenanceDate;
+        this.cost = cost;
         this.car = car;
         this.invoices = invoices;
     }
@@ -46,6 +49,14 @@ public class Maintenance {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     public List<String> getInvoices() {

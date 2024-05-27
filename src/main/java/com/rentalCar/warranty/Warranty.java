@@ -24,18 +24,21 @@ public class Warranty {
 
     private LocalDate endDate;
 
+    private Double cost;
+
     private List<String> invoices;
 
     public Warranty() {
     }
 
-    public Warranty(Long id, Car car, String warrantyProvider, LocalDate startDate, Long coveragePeriod, LocalDate endDate, List<String> invoices) {
+    public Warranty(Long id, Car car, String warrantyProvider, LocalDate startDate, Long coveragePeriod, LocalDate endDate, Double cost, List<String> invoices) {
         this.id = id;
         this.car = car;
         this.warrantyProvider = warrantyProvider;
         this.startDate = startDate;
         this.coveragePeriod = coveragePeriod;
         this.endDate = endDate;
+        this.cost = cost;
         this.invoices = invoices;
     }
 
@@ -45,6 +48,14 @@ public class Warranty {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     public Car getCar() {

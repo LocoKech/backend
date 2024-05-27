@@ -71,8 +71,13 @@ public class MaintenanceService {
     public void checkMaintenance() {
         List<Maintenance> maintenances = maintenanceRepository.findAll();
         List<Maintenance> dueMaintenances = maintenances.stream()
+                .filter(this::isFrequent)
                 .filter(this::isDueForMaintenance)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isFrequent(Maintenance maintenance){
+        return maintenance.getFrequency() != Frequency.Once;
     }
 
     private boolean isDueForMaintenance(Maintenance maintenance) {
@@ -170,6 +175,7 @@ public class MaintenanceService {
         maintenance.setFrequency(request.getFrequency());
         maintenance.setLastMaintenanceDate(request.getLastMaintenanceDate());
         maintenance.setCar(car);
+        maintenance.setCost(request.getCost());
 
         return maintenanceRepository.save(maintenance);
     }

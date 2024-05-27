@@ -72,6 +72,4 @@ public class BookingController {
         return this.bookingService.getReceiptAsPdf(id);
     }
 
-
-
 }

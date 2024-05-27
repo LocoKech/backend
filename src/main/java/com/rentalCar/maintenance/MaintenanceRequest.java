@@ -9,8 +9,17 @@ public class MaintenanceRequest {
     private Frequency frequency;
     private LocalDate lastMaintenanceDate;
     private String carId;
+    private Double cost;
 
     public MaintenanceRequest() {
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     public String getTaskName() {
