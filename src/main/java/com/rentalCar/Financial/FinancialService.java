@@ -173,13 +173,13 @@ public class FinancialService {
                         .filter(maintenance -> !maintenance.getLastMaintenanceDate().isBefore(now.minusDays(6)))
                         .collect(Collectors.groupingBy(
                                 maintenance -> maintenance.getLastMaintenanceDate().format(formatter),
-                                Collectors.summingDouble(Maintenance::getCost) // Assuming `Maintenance` has a `getCost` method
+                                Collectors.summingDouble(Maintenance::getCost)
                         ));
                 warrantyMap = warrantyRepository.findAll().stream()
                         .filter(warranty -> !warranty.getStartDate().isBefore(now.minusDays(6)))
                         .collect(Collectors.groupingBy(
                                 warranty -> warranty.getStartDate().format(formatter),
-                                Collectors.summingDouble(Warranty::getCost) // Assuming `Warranty` has a `getCost` method
+                                Collectors.summingDouble(Warranty::getCost)
                         ));
                 break;
             case MONTHLY:
